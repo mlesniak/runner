@@ -21,15 +21,12 @@ import java.util.*;
  */
 public class ConfigurationTool {
     private static Logger LOG = LoggerFactory.getLogger(ConfigurationTool.class);
-    private static String appName;
-    private static Class<? extends RunnerConfiguration> bean;
 
-    public static RunnerConfiguration parse(String[] args) {
+    public static RunnerConfiguration parse(Class<? extends RunnerConfiguration> clazz, String name, String[] args) {
         try {
-            initializeInstanceVariablesFromAnnotations();
-            initializeLogging(appName);
-            RunnerConfiguration instance = bean.newInstance();
-            Properties props = loadProperties(appName, args);
+            initializeLogging(name);
+            RunnerConfiguration instance = clazz.newInstance();
+            Properties props = loadProperties(name, args);
             Map<String, String> argMap = parseArgs(args);
             RunnerConfiguration config = parseToInstance(instance, props, argMap);
             addNonFields(instance, props, argMap);
@@ -46,23 +43,6 @@ public class ConfigurationTool {
 
         // Never reached.
         return null;
-    }
-
-    private static void initializeInstanceVariablesFromAnnotations() throws ClassNotFoundException {
-        StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-        for (int i = 0; i < stackTrace.length; i++) {
-            if (stackTrace[i].getClassName().equals("com.mlesniak.runner.ConfigurationTool")) {
-                String annotatedClass = stackTrace[i + 3].getClassName();
-                Class<?> annClass = ConfigurationTool.class.getClassLoader().loadClass(annotatedClass);
-                Runner annotation = annClass.getAnnotation(Runner.class);
-                if (annotation == null) {
-                    throw new IllegalArgumentException("Main class not annotated with Runner.");
-                }
-                bean = annotation.configClass();
-                appName = annotation.appName();
-                return;
-            }
-        }
     }
 
     private static void initializeLogging(String appName) throws JoranException {

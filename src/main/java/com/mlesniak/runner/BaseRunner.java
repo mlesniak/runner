@@ -13,8 +13,8 @@ import static com.mlesniak.runner.ConfigurationTool.*;
 public class BaseRunner {
     private static Logger LOG = LoggerFactory.getLogger(BaseRunner.class);
 
-    public void initRunner(String[] args) throws Exception {
-        parse(args);
+    public void initRunner(Class<? extends RunnerConfiguration> clazz, String name, String[] args) throws Exception {
+        parse(clazz, name, args);
     }
 
     public void info(String msg, String ... args) {
