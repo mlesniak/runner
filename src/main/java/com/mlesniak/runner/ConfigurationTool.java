@@ -52,7 +52,7 @@ public class ConfigurationTool {
         StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
         for (int i = 0; i < stackTrace.length; i++) {
             if (stackTrace[i].getClassName().equals("com.mlesniak.runner.ConfigurationTool")) {
-                String annotatedClass = stackTrace[i + 2].getClassName();
+                String annotatedClass = stackTrace[i + 3].getClassName();
                 Class<?> annClass = ConfigurationTool.class.getClassLoader().loadClass(annotatedClass);
                 Runner annotation = annClass.getAnnotation(Runner.class);
                 if (annotation == null) {
