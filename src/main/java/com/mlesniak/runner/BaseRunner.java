@@ -20,4 +20,8 @@ public class BaseRunner {
     public void info(String msg, String ... args) {
         LOG.info(msg, args);
     }
+
+    public void debug(String msg, String ... args) {
+        LOG.debug(msg, args);
+    }
 }
